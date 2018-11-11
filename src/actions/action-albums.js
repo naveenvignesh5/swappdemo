@@ -16,6 +16,7 @@ const albumDataRequestError = error => ({
   error,
 });
 
+// eslint-disable-next-line
 export const fetchAlbumData = userId => async (dispatch) => {
   try {
     dispatch(albumDataRequest());

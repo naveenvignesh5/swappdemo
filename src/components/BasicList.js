@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import {
+  View, FlatList, StyleSheet, RefreshControl,
+} from 'react-native';
 import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
@@ -9,9 +11,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const BasicList = ({ data, ListItem, onItemPress }) => (
+const BasicList = ({
+  data, ListItem, onItemPress, onRefresh, refreshing,
+}) => (
   <View style={styles.container}>
     <FlatList
+      refreshControl={(
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      )}
       showsVerticalScrollIndicator={false}
       data={data}
       renderItem={({ item }) => <ListItem {...item} onPress={() => onItemPress(item)} />}
@@ -24,10 +34,14 @@ BasicList.propTypes = {
   data: PropTypes.array.isRequired,
   ListItem: PropTypes.any.isRequired,
   onItemPress: PropTypes.func,
+  onRefresh: PropTypes.func,
+  refreshing: PropTypes.bool,
 };
 
 BasicList.defaultProps = {
   onItemPress: () => {},
+  onRefresh: () => {},
+  refreshing: false,
 };
 
 export default BasicList;

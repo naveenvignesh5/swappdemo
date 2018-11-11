@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   BackHandler,
+  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -17,6 +18,10 @@ import { fetchAlbumData } from '../actions/action-albums';
 import BasicList from '../components/BasicList';
 import Loader from '../components/Loader';
 import AlbumListItem from '../components/ListItemViews/AlbumListItem';
+
+// Constants
+import { NAVIGATION } from '../constants/routeNames';
+import { COLORS } from '../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,24 +37,37 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 10,
   },
+  errorText: {
+    fontSize: 14,
+    color: COLORS.red,
+    marginBottom: 20,
+  },
 });
 
 class Albums extends Component {
   state = {}
 
   componentDidMount = () => {
-    const { navigation } = this.props;
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-    this.props.fetchAlbumData(navigation.state.params.userId);
+    this.handleAlbumDataFetch();
   }
 
   componentWillUnmount = () => {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
+  handleAlbumDataFetch = () => {
+    const { navigation } = this.props;
+    this.props.fetchAlbumData(navigation.state.params.userId);
+  }
+
   handleBackPress = () => {
     this.props.navigation.goBack();
     return true;
+  }
+
+  handleItemPress = (album) => {
+    this.props.navigation.navigate(NAVIGATION.images, { albumId: album.id });
   }
 
   render() {
@@ -66,7 +84,8 @@ class Albums extends Component {
     if (isError) {
       return (
         <View style={styles.container}>
-          <Text style={styles.errorText}>Unable to Fetch Users</Text>
+          <Text style={styles.errorText}>Unable to Fetch Albums</Text>
+          <Button title="Retry" color={COLORS.red} onPress={this.handleAlbumDataFetch} />
         </View>
       );
     }
@@ -77,6 +96,9 @@ class Albums extends Component {
         <BasicList
           data={albums}
           ListItem={AlbumListItem}
+          onItemPress={this.handleItemPress}
+          onRefresh={this.handleAlbumDataFetch}
+          refreshing={isFetching}
         />
       </View>
     );

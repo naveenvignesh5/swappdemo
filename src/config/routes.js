@@ -1,8 +1,7 @@
-import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
 // Screens
-import { Home, Albums } from '../screens';
+import { Home, Albums, Images } from '../screens';
 
 // Constants
 import { NAVIGATION } from '../constants/routeNames';
@@ -19,7 +18,13 @@ const routes = {
     navigationOptions: {
       header: null,
     },
-  }
+  },
+  [NAVIGATION.images]: {
+    screen: Images,
+    navigationOptions: {
+      header: null,
+    },
+  },
 };
 
 const AppNavigator = createStackNavigator({ ...routes });

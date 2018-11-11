@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View, Text, Button, StyleSheet,
+} from 'react-native';
 import PropTypes from 'prop-types';
 
 import { bindActionCreators } from 'redux';
@@ -20,10 +22,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 10,
   },
   errorText: {
     fontSize: 14,
     color: COLORS.red,
+    marginBottom: 20,
+  },
+  title: {
+    fontFamily: 'monospace',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 30,
+    marginBottom: 10,
   },
 });
 
@@ -52,16 +63,20 @@ class Home extends Component {
       return (
         <View style={styles.container}>
           <Text style={styles.errorText}>Unable to Fetch Users</Text>
+          <Button title="Retry" color={COLORS.red} onPress={this.props.fetchUserData} />
         </View>
       );
     }
 
     return (
       <View style={styles.container}>
+        <Text style={styles.title}>List Of Users</Text>
         <BasicList
           data={users}
           ListItem={UserListItem}
           onItemPress={this.handleUserItemPress}
+          onRefresh={this.props.fetchUserData}
+          refreshing={isFetching}
         />
       </View>
     );

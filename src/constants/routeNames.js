@@ -1,4 +1,5 @@
-export const NAVIGATION = {
+export const NAVIGATION = { // eslint-disable-line
   home: 'Home',
-  albums: 'Albums'
+  albums: 'Albums',
+  images: 'Images',
 };
